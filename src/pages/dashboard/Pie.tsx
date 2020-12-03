@@ -1,8 +1,8 @@
 import { PieChart } from 'react-minimal-pie-chart';
 
-export default function Pie():JSX.Element{
-    
-    return(
+export default function Pie(): JSX.Element {
+
+    return (
         <PieChart
             data={[
                 { title: 'One', value: 10, color: 'red' },

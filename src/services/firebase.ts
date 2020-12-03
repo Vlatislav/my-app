@@ -2,21 +2,22 @@ import 'firebase/firestore';
 import firebase from 'firebase';
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBjVe9zaDd0HFY0W9cFmLveiiNUgBMSAeg",
-  authDomain: "project-react-aad27.firebaseapp.com",
-  databaseURL: "https://project-react-aad27.firebaseio.com",
-  projectId: "project-react-aad27",
-  storageBucket: "project-react-aad27.appspot.com",
-  messagingSenderId: "131550011353",
-  appId: "1:131550011353:web:169fc92a662b8cb6ec83c8"
+    apiKey: "AIzaSyBjVe9zaDd0HFY0W9cFmLveiiNUgBMSAeg",
+    authDomain: "project-react-aad27.firebaseapp.com",
+    databaseURL: "https://project-react-aad27.firebaseio.com",
+    projectId: "project-react-aad27",
+    storageBucket: "project-react-aad27.appspot.com",
+    messagingSenderId: "131550011353",
+    appId: "1:131550011353:web:169fc92a662b8cb6ec83c8"
 };
+
 const fire = firebase.initializeApp(firebaseConfig)
 
 export const firebaseService = {
     auth: fire.auth,
     firestore: fire.firestore,
     userID: fire.auth().currentUser?.uid,
-    addNewCompany: async function(nameOfCompany:string | undefined) {
+    addNewCompany: async function (nameOfCompany: string | undefined) {
         if (this.userID === undefined)
             return alert('Error.You need to register')
         if (!nameOfCompany)
@@ -64,7 +65,7 @@ export const firebaseService = {
                 })
         }
     },
-    addNewRisk: async function(nameOfCompanyForAddRisk:string | undefined,nameOfRisk:string | undefined,valueOfRisk:string | undefined){
+    addNewRisk: async function (nameOfCompanyForAddRisk: string | undefined, nameOfRisk: string | undefined, valueOfRisk: string | undefined) {
         if (this.userID === undefined)
             return alert('Error.You need to register')
         const objForName = await this.firestore().collection('Company').where('name', '==', nameOfCompanyForAddRisk).get();
@@ -73,7 +74,7 @@ export const firebaseService = {
         if (objForName.empty) {
             alert(`company named ${nameOfCompanyForAddRisk} does not exist`)
         }
-        else {  
+        else {
             this.firestore().collection('User').doc(this.userID).get()
                 .then(doc => {
                     if (doc.exists) {
@@ -105,38 +106,38 @@ export const firebaseService = {
                 })
         }
     },
-    logIn: function(email:string,pass:string){
-        console.log(email,pass)
+    logIn: function (email: string, pass: string) {
+        console.log(email, pass)
         this.auth().signInWithEmailAndPassword(email, pass)
-        .then(resp => {
-          console.log(resp.user?.uid)
-          return alert(`You sign in with ${email}`)
-        })
-        .catch(error => {
-          if (error.code === 'auth/user-not-found')
-            return alert('USER NOT FOUND!!! GO TO REGISTRATION WINDOW!!!')
-          else if (error.code === 'auth/wrong-password')
-              return alert('WRONG PASSWORD!!! TRY AGAIN!!!')
-          else return console.log('error',error)
-        })
-        console.log(email,pass)
-    },
-    register: function(email:string,pass:string){
-        firebase.auth().createUserWithEmailAndPassword(email, pass)
-          .then(resp => {
-            console.log(resp.user)
-            this.firestore().collection('User').doc(resp.user?.uid).set({
-              email: email,
-              password: pass,
-              idCompany: [],
+            .then(resp => {
+                console.log(resp.user?.uid)
+                return alert(`You sign in with ${email}`)
             })
-              .then(resp => console.log(resp))
-              .catch(error => console.log(error))
-          })
-          .catch(error => {
-            if (error.code === 'auth/email-already-in-use')
-              return alert('USER ALREADY IN USE!!! GO TO SIGN IN!!!')
-          })
+            .catch(error => {
+                if (error.code === 'auth/user-not-found')
+                    return alert('USER NOT FOUND!!! GO TO REGISTRATION WINDOW!!!')
+                else if (error.code === 'auth/wrong-password')
+                    return alert('WRONG PASSWORD!!! TRY AGAIN!!!')
+                else return console.log('error', error)
+            })
+        console.log(email, pass)
+    },
+    register: function (email: string, pass: string) {
+        firebase.auth().createUserWithEmailAndPassword(email, pass)
+            .then(resp => {
+                console.log(resp.user)
+                this.firestore().collection('User').doc(resp.user?.uid).set({
+                    email: email,
+                    password: pass,
+                    idCompany: [],
+                })
+                    .then(resp => console.log(resp))
+                    .catch(error => console.log(error))
+            })
+            .catch(error => {
+                if (error.code === 'auth/email-already-in-use')
+                    return alert('USER ALREADY IN USE!!! GO TO SIGN IN!!!')
+            })
     },
 
 };
