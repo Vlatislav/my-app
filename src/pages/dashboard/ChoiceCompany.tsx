@@ -1,48 +1,46 @@
-//import { firestore,auth } from "../index"
-//import {useState} from 'react'
+import { useState, useEffect } from "react"
+import { firebaseService } from '../../services/firebase'
+import Select from 'react-select'
+
+export default function ChoiceCompany(): JSX.Element {
+
+    const [companyListID, setCompanyListID] = useState([])
+    const [companyName, setCompanyName] = useState<string[]>([])
+    const [options, setOptions] = useState<object[]>([])
+
+    useEffect(() => {
+        firebaseService.fire.firestore().collection('User').doc(firebaseService.fire.auth().currentUser?.uid).get()
+            .then(doc => {
+                if (doc.exists) {
+                    setCompanyListID(doc.data()?.idCompany)
+                }
+            })
+            .catch(error => console.log(error))
+    }, [])
+
+    useEffect(() => {
+        companyListID.forEach((item: string, index: number) => {
+            firebaseService.fire.firestore().collection('Company').doc(item).get()
+                .then(doc => {
+                    setCompanyName(state => state.concat(doc.data()?.name))
+                })
+        })
+    }, [companyListID])
+
+    useEffect(() => {
+        if (companyName.length == companyListID.length)
+            for (const key in companyName)
+                setOptions(state => state.concat({ value: companyName[key], label: companyName[key] }))
+    }, [companyName]);
 
 
-export default function ChoiceCompany():JSX.Element{
+    return (
+        <>
+            <Select
+                // onMenuOpen={handleClickMenu}
+                options={options}
+            />
+        </>
 
-
-    //const handleHange = (event:any) =>{
-    //    console.log(event.target.value)
-    //}
-    //const [STR,setStr] = useState('')
-    //const arrayCompanyName: any[] = []
-    //let listIdCompany
-    //let userID : string | undefined = auth.currentUser?.uid
-    //console.log('asds',userID)
-    //firestore.collection('User').doc(userID).get()
-    //.then(doc =>{
-    //    if(doc.exists){
-    //        listIdCompany = doc.data()?.idCompany
-    //        console.log('LIC',listIdCompany)
-    //        listIdCompany.forEach((item:string)=>{
-    //            firestore.collection('Company').doc(item).get()
-    //            .then(doc =>{
-    //                if(doc.exists)
-    //                    arrayCompanyName.push(doc.data()?.name)
-    //                    setStr(STR+`${doc.data()?.name}`)
-    //            })
-    //            .catch(error => console.log(error))
-    //        })
-    //    }
-    //})
-    //.catch(error => console.log(error))
-    //let str = ''
-    //arrayCompanyName.forEach((item,index)=>{
-    //    str+=`${item}`
-    //})
-    //console.log('12345',arrayCompanyName)
-    
-    return(
-    <div>
-        {//<h1 dangerouslySetInnerHTML={{__html: ''}} ></h1>
-        }
-        <select id="select">
-
-        </select>
-    </div>
     )
 }

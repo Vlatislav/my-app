@@ -1,19 +1,32 @@
 import React, { useState } from 'react'
 import { firebaseService } from '../../services/firebase'
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
+import { makeStyles } from '@material-ui/core/styles';
 import './registration.css'
-//import { firebaseService } from '../../../services/firebase'
-//import firebase from 'firebase'
 
+function Alert(props: any) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    position: 'absolute',
+    top: `94%`,
+    left: 251,
+    width: '20%',
+    '& > * + *': {
+      marginTop: theme.spacing(2),
+    },
+  },
+}));
 
 export default function Registration(): JSX.Element {
 
-  //firebase.auth().signOut()
-  //  .then(resp => console.log('resp', resp))
-  //  .catch(error => console.log('error', error));
-
   const [email, setLogin] = useState('')
   const [pass, setPass] = useState('')
-  const [isLogin, toggleLogin] = useState(true)
+  const [isLogin, toggleLogin] = useState(false)
+  const [open, setOpen] = useState(true)
 
   const handleLoginChange = (event: React.FormEvent<HTMLInputElement>) => {
     setLogin(event.currentTarget.value);
@@ -27,101 +40,82 @@ export default function Registration(): JSX.Element {
 
   const handleSubmit = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     event.preventDefault();
-    if (isLogin) {
+    if (!isLogin) {
       firebaseService.logIn(email, pass)
     }
     else {
       firebaseService.register(email, pass)
     }
-    /*console.log(email, pass)
-
-    if (isLogin) {
-      console.log('sign in men')
-
-      firebase.auth().signInWithEmailAndPassword(email, pass)
-        .then(resp => {
-          console.log(resp.user?.uid)
-          //document.location.href += 'company'
-          return alert(`You sign in with ${email}`)
-        })
-        .catch(error => {
-          if (error.code === 'auth/user-not-found')
-            return alert('USER NOT FOUND!!! GO TO REGISTRATION WINDOW!!!')
-          else
-            if (error.code === 'auth/wrong-password')
-              return alert('WRONG PASSWORD!!! TRY AGAIN!!!')
-          return console.log(error)
-        })
-    }
-    else {
-      console.log('registration in men')
-      firebase.auth().createUserWithEmailAndPassword(email, pass)
-        .then(resp => {
-          console.log(resp.user)
-          firestore.collection('User').doc(resp.user?.uid).set({
-            email: email,
-            password: pass,
-            idCompany: [],
-          })
-            .then(resp => console.log(resp))
-            .catch(error => console.log(error))
-        })
-        .catch(error => {
-          if (error.code === 'auth/email-already-in-use')
-            return alert('USER ALREADY IN USE!!! GO TO SIGN IN!!!')
-        })
-    }*/
+    console.log(email, pass)
   }
 
   const isChecked = (event: React.FormEvent<HTMLInputElement>) => {
+    console.log(event.currentTarget.checked)
     toggleLogin(event.currentTarget.checked);
   }
 
+  const handleClose = (event: any, reason: any) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpen(false);
+  };
+
+  const classes = useStyles();
+
   return (
+    <>
+      <div className={classes.root}>
+        <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+          <Alert onClose={handleClose} severity="success">
+            This is a success message!
+        </Alert>
+        </Snackbar>
+      </div>
+      <form action="/company">
+        <h2>SIGN IN</h2>
+        <label className="switch">
+          <input id="input" type="checkbox"
+            onChange={isChecked}></input>
+          <span className="slider round"></span>
+        </label>
 
-    <form action="/company">
-      <h2>SIGN IN</h2>
-      <label className="switch">
-        <input id="input" type="checkbox"
-          onChange={isChecked}></input>
-        <span className="slider round"></span>
-      </label>
+        <label>
+          <p className="label-txt">EMAIL</p>
+          <input
+            type="text"
+            className="input"
+            id="email"
+            placeholder="e-mail"
+            onChange={handleLoginChange}>
+          </input>
+          <div className="line-box">
+            <div className="line"></div>
+          </div>
+        </label>
 
-      <label>
-        <p className="label-txt">EMAIL</p>
-        <input
-          type="text"
-          className="input"
-          id="email"
-          placeholder="e-mail"
-          onChange={handleLoginChange}>
-        </input>
-        <div className="line-box">
-          <div className="line"></div>
-        </div>
-      </label>
-
-      <label>
-        <p className="label-txt">PASSWORD</p>
-        <input
-          type="password"
-          className="input"
-          id="password"
-          placeholder="password"
-          onChange={handlePassChange}>
-        </input>
-        <div className="line-box">
-          <div className="line"></div>
-        </div>
-      </label>
-      <button
-        type="submit"
-        onClick={handleSubmit}
-      >
-        Submit
+        <label>
+          <p className="label-txt">PASSWORD</p>
+          <input
+            type="password"
+            className="input"
+            id="password"
+            placeholder="password"
+            onChange={handlePassChange}>
+          </input>
+          <div className="line-box">
+            <div className="line"></div>
+          </div>
+        </label>
+        <button
+          type="submit"
+          onClick={handleSubmit}
+        >
+          Submit
       </button>
 
-    </form>
+      </form>
+    </>
   )
 }
 

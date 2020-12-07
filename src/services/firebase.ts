@@ -14,32 +14,30 @@ const firebaseConfig = {
 const fire = firebase.initializeApp(firebaseConfig)
 
 export const firebaseService = {
+    fire: fire,
     auth: fire.auth,
     firestore: fire.firestore,
     userID: fire.auth().currentUser?.uid,
     addNewCompany: async function (nameOfCompany: string | undefined) {
-        if (this.userID === undefined)
+        if (fire.auth().currentUser?.uid === undefined)
             return alert('Error.You need to register')
         if (!nameOfCompany)
             alert('Сompany name cannot be an empty string!!!')
         else if (!isNaN(+nameOfCompany))
             alert('Сompany name cannot be an number\'s string!!!')
         else if (true) {
-            const findCompanyForName = await this.firestore().collection('Company').where('name', '==', nameOfCompany).get();
+            console.log('_-_-', nameOfCompany, fire.auth().currentUser?.uid)
+            const findCompanyForName = await fire.firestore().collection('Company').where('name', '==', nameOfCompany).get();
 
-            this.firestore().collection('User').doc(this.userID).get()
-                .then(function (doc) {
+            fire.firestore().collection('User').doc(fire.auth().currentUser?.uid).get()
+                .then(doc => {
                     if (doc.exists) {
                         let listCompany = doc.data()?.idCompany
-
                         if (findCompanyForName.empty) {
-
-                            console.log('!!!', nameOfCompany)
-
-                            const newCompany = firebaseService.firestore().collection('Company').doc()
+                            const newCompany = fire.firestore().collection('Company').doc()
                             const newCompanyID = newCompany.id;
 
-                            firebaseService.firestore().collection('User').doc(firebaseService.userID).update({
+                            fire.firestore().collection('User').doc(fire.auth().currentUser?.uid).update({
                                 idCompany: [...listCompany, newCompanyID]
                             })
                                 .then(resp => console.log('it\'s okay', resp))
@@ -66,16 +64,15 @@ export const firebaseService = {
         }
     },
     addNewRisk: async function (nameOfCompanyForAddRisk: string | undefined, nameOfRisk: string | undefined, valueOfRisk: string | undefined) {
-        if (this.userID === undefined)
+        if (fire.auth().currentUser?.uid === undefined)
             return alert('Error.You need to register')
-        const objForName = await this.firestore().collection('Company').where('name', '==', nameOfCompanyForAddRisk).get();
-
+        const objForName = await fire.firestore().collection('Company').where('name', '==', nameOfCompanyForAddRisk).get();
 
         if (objForName.empty) {
             alert(`company named ${nameOfCompanyForAddRisk} does not exist`)
         }
         else {
-            this.firestore().collection('User').doc(this.userID).get()
+            fire.firestore().collection('User').doc(fire.auth().currentUser?.uid).get()
                 .then(doc => {
                     if (doc.exists) {
                         let listIdCompany = doc.data()?.idCompany
@@ -89,11 +86,23 @@ export const firebaseService = {
 
                         if (listIdCompany.includes(companyID)) {
                             if (nameOfRisk && isNaN(+nameOfRisk)) {
-                                this.firestore().collection('Company').doc(companyID).update({ risks: { ...risksObj, [nameOfRisk]: [valueOfRisk] } })
-                                    .then(resp => console.log('it\'s okay', resp))
-                                    .catch(error => console.log(new Error(error)))
-                                alert(`You added a new risk ${nameOfRisk}`)
-                                console.log(risksObj);
+
+                                fire.firestore().collection('Company').doc(companyID).get()
+                                    .then(doc => {
+                                        if (doc.exists) {
+                                            const arrayOfRisks = Object.keys(doc.data()?.risks)
+                                            //console.log(typeof arrayOfRisks, arrayOfRisks)
+                                            if (arrayOfRisks.includes(nameOfRisk))
+                                                alert('This risk already exists')
+                                            else {
+                                                fire.firestore().collection('Company').doc(companyID).update({ risks: { ...risksObj, [nameOfRisk]: [valueOfRisk] } })
+                                                    .then(resp => console.log('it\'s okay', resp))
+                                                    .catch(error => console.log(new Error(error)))
+                                                alert(`You added a new risk ${nameOfRisk}`)
+                                                console.log(risksObj);
+                                            }
+                                        }
+                                    })
                             }
                             else {
                                 alert(`Invalid value of name risk ${nameOfRisk}`)
@@ -108,35 +117,41 @@ export const firebaseService = {
     },
     logIn: function (email: string, pass: string) {
         console.log(email, pass)
-        this.auth().signInWithEmailAndPassword(email, pass)
+        this.fire.auth().signInWithEmailAndPassword(email, pass)
             .then(resp => {
                 console.log(resp.user?.uid)
                 return alert(`You sign in with ${email}`)
             })
             .catch(error => {
                 if (error.code === 'auth/user-not-found')
-                    return alert('USER NOT FOUND!!! GO TO REGISTRATION WINDOW!!!')
-                else if (error.code === 'auth/wrong-password')
-                    return alert('WRONG PASSWORD!!! TRY AGAIN!!!')
-                else return console.log('error', error)
+                    return alert('USER NOT FOUND!!! GO TO REGISTRATION')
+                else
+                    if (error.code === 'auth/wrong-password')
+                        return alert('WRONG PASSWORD!!! TRY AGAIN!!!')
+                return console.log(error)
             })
         console.log(email, pass)
     },
     register: function (email: string, pass: string) {
-        firebase.auth().createUserWithEmailAndPassword(email, pass)
+        console.log('1')
+        fire.auth().createUserWithEmailAndPassword(email, pass)
             .then(resp => {
+                console.log('2')
                 console.log(resp.user)
-                this.firestore().collection('User').doc(resp.user?.uid).set({
+                fire.firestore().collection('User').doc(resp.user?.uid).set({
                     email: email,
                     password: pass,
                     idCompany: [],
                 })
-                    .then(resp => console.log(resp))
-                    .catch(error => console.log(error))
+                    .then(resp => alert(`created account ${email}`))
+                    .catch(error => {
+                        console.log('4')
+                        if (error.code === "auth/invalid-email")
+                            return alert(error.message)
+                    })
             })
             .catch(error => {
-                if (error.code === 'auth/email-already-in-use')
-                    return alert('USER ALREADY IN USE!!! GO TO SIGN IN!!!')
+                console.log('5', error.message)
             })
     },
 

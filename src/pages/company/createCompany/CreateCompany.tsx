@@ -11,8 +11,6 @@ export default function CreateCompany(): JSX.Element {
         console.log('---', event.currentTarget.value, event.currentTarget.id)
     }
 
-
-
     const addNewCompany = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         event.preventDefault();
         firebaseService.addNewCompany(nameOfCompany)
