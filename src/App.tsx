@@ -18,7 +18,7 @@ import Drawer from '@material-ui/core/Drawer';
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import Divider from '@material-ui/core/Divider';
-import Dashboard from './pages/dashboard/Dashboard';
+import Dashboard from './pages/dashboard/dashboard/Dashboard';
 import Company from './pages/company/Company';
 
 const drawerWidth: number = 240;

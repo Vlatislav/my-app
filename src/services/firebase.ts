@@ -115,22 +115,20 @@ export const firebaseService = {
                 })
         }
     },
-    logIn: function (email: string, pass: string) {
+    logIn: async function (email: string, pass: string) {
         console.log(email, pass)
-        this.fire.auth().signInWithEmailAndPassword(email, pass)
-            .then(resp => {
-                console.log(resp.user?.uid)
-                return alert(`You sign in with ${email}`)
-            })
-            .catch(error => {
-                if (error.code === 'auth/user-not-found')
-                    return alert('USER NOT FOUND!!! GO TO REGISTRATION')
-                else
-                    if (error.code === 'auth/wrong-password')
-                        return alert('WRONG PASSWORD!!! TRY AGAIN!!!')
-                return console.log(error)
-            })
-        console.log(email, pass)
+        try {
+            const resp = await this.fire.auth().signInWithEmailAndPassword(email, pass);
+            console.log(resp.user?.uid);
+            if (resp.user?.email) {
+                return resp.user?.email;
+                //alert(`You sign in with ${email}`);
+            }
+            else throw new Error('user not found')
+        } catch (error) {
+            alert(error);
+            return 'error'
+        }
     },
     register: function (email: string, pass: string) {
         console.log('1')

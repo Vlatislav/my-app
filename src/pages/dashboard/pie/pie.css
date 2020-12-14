@@ -1,0 +1,23 @@
+#pie{
+    display: flex;
+    margin-top: 20%;
+}
+
+#red{
+    position: absolute;
+    top:70%;
+    font-size: 0.8rem;
+    color: red;
+}
+#green{
+    position: absolute;
+    top:72%;
+    font-size: 0.8rem;
+    color: green;
+}
+#blue{
+    position: absolute;
+    top:74%;
+    font-size: 0.8rem;
+    color: blue;
+}
