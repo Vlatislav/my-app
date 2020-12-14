@@ -50,7 +50,7 @@ export default function Registration(): JSX.Element {
           const emailFromBackend = await firebaseService.logIn(email, pass)
           if (emailFromBackend !== 'error') {
             dispatch(loginSuccessAction({ email: emailFromBackend }))
-            history.push('/company')
+            history.push("/company")
           }
           else dispatch(loginErrorAction(emailFromBackend))
         }, 5000);

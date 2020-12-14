@@ -24,7 +24,6 @@ export const loginReducer = (state = initialState, action: AnyAction) => {
         }
         case auth.LOGOUT: {
             return { ...state, isLoading: false, userInfo: { email: '' }, isLogged: false, errorMessage: '' }
-
         }
         default: return { ...state }
     }

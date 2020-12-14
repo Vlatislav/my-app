@@ -4,10 +4,14 @@ import './header.css'
 import { useDispatch, useSelector } from 'react-redux'
 import { logoutAction } from '../../../store/actions/loginAction'
 import { RootState } from '../../../store/reducers/rootReducer'
+import { useHistory } from 'react-router-dom'
 
 export default function Header(props: any): JSX.Element {
+
+    const history = useHistory();
+
     const email = useSelector((state: RootState) => state.login.userInfo.email)
-    console.log(email)
+    console.log('email', email)
     const dispatch = useDispatch();
 
     const logOut = () => {
@@ -16,8 +20,7 @@ export default function Header(props: any): JSX.Element {
                 dispatch(logoutAction());
             })
             .catch(error => console.log(error))
-        // setEmail('sign out')
-        window.location.reload()
+        history.push('/')
     }
 
     return (
