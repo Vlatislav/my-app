@@ -1,4 +1,3 @@
-import MaterialTable from "material-table";
 import { DataGrid } from '@material-ui/data-grid';
 
 export default function TableRisk(): JSX.Element {

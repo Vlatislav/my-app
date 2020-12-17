@@ -6,20 +6,6 @@ import { loginAction, loginErrorAction, loginSuccessAction } from '../../store/a
 import { RootState } from '../../store/reducers/rootReducer';
 import { useHistory } from 'react-router-dom';
 
-
-
-/*const useStyles = makeStyles((theme) => ({
-  root: {
-    position: 'absolute',
-    top: `94%`,
-    left: 251,
-    width: '20%',
-    '& > * + *': {
-      marginTop: theme.spacing(2),
-    },
-  },
-}));*/
-
 export default function Registration(): JSX.Element {
 
   const history = useHistory();
@@ -27,7 +13,6 @@ export default function Registration(): JSX.Element {
   const [email, setLogin] = useState('')
   const [pass, setPass] = useState('')
   const [isLogin, toggleLogin] = useState(false)
-  //const [open, setOpen] = useState(true)
   const dispatch = useDispatch();
   const isLoading = useSelector((state: RootState) => state.login.isLoading)
 
@@ -70,15 +55,6 @@ export default function Registration(): JSX.Element {
     console.log(event.currentTarget.checked)
     toggleLogin(event.currentTarget.checked);
   }
-
-  /*const handleClose = (event: any, reason: any) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-    setOpen(false);
-  };*/
-
-  //const classes = useStyles();
 
   return (
     <>

@@ -1,4 +1,3 @@
-import ChoiceCompany from '../choise/ChoiceCompany'
 import Pie from '../pie/Pie'
 import './dashboard.css'
 import Header from '../header/Header'

@@ -122,9 +122,9 @@ export const firebaseService = {
             console.log(resp.user?.uid);
             if (resp.user?.email) {
                 return resp.user?.email;
-                //alert(`You sign in with ${email}`);
             }
-            else throw new Error('user not found')
+            return 'error'
+            //else throw new Error('user not found')
         } catch (error) {
             alert(error);
             return 'error'
