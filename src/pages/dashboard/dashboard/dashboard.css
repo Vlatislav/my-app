@@ -1,10 +1,10 @@
-/*#block{
-     width: initial;
+#block_dashboard{
+     display: flex;
+     flex-direction: column;
+     width: 100%;
 }
-*/
 
-
-
-
-
-
+#block_dashboard_form{
+     display: flex;
+     width: 70%;
+}

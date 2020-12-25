@@ -25,7 +25,6 @@ export default function Registration(): JSX.Element {
     setPass(event.currentTarget.value);
     console.log(event.currentTarget.value, event.currentTarget.id)
   }
-
   const handleSubmit = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     event.preventDefault();
     if (!isLogin) {
@@ -107,13 +106,3 @@ export default function Registration(): JSX.Element {
     </>
   )
 }
-
-/*
-<div className={classes.root}>
-        <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-          <Alert onClose={handleClose} severity="success">
-            This is a success message!
-        </Alert>
-        </Snackbar>
-      </div>
-       */

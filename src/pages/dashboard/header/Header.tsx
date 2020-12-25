@@ -15,11 +15,7 @@ export default function Header(props: any): JSX.Element {
     const dispatch = useDispatch();
 
     const logOut = () => {
-        firebaseService.fire.auth().signOut()
-            .then(resp => {
-                dispatch(logoutAction());
-            })
-            .catch(error => console.log(error))
+        firebaseService.logOutButtonHeader(dispatch, logoutAction)
         history.push('/')
     }
 

@@ -1,5 +1,7 @@
 import 'firebase/firestore';
 import firebase from 'firebase';
+import { Dispatch } from 'redux';
+import { auth } from '../store/actions/loginAction';
 
 const firebaseConfig = {
     apiKey: "AIzaSyBjVe9zaDd0HFY0W9cFmLveiiNUgBMSAeg",
@@ -152,5 +154,33 @@ export const firebaseService = {
                 console.log('5', error.message)
             })
     },
-
+    companyListID: function (setCompanyListID: React.Dispatch<React.SetStateAction<never[]>>) {
+        fire.firestore().collection('User').doc(this.fire.auth().currentUser?.uid).get()
+            .then(doc => {
+                if (doc.exists) {
+                    setCompanyListID(doc.data()?.idCompany)
+                }
+            })
+            .catch(error => console.log('error', error))
+    },
+    setCompanysName: function (companyListID: never[], setCompanysName: React.Dispatch<React.SetStateAction<string[]>>) {
+        companyListID.forEach((item: string) => {
+            fire.firestore().collection('Company').doc(item).get()
+                .then(doc => {
+                    setCompanysName(state => state.concat(doc.data()?.name))
+                })
+        })
+    },
+    setCompanyNamesInSelect: function (companysName: string[], companyListID: never[], setOptions: React.Dispatch<React.SetStateAction<object[]>>) {
+        if (companysName.length === companyListID.length)
+            for (const key in companysName)
+                setOptions(state => state.concat({ value: companysName[key], label: companysName[key] }))
+    },
+    logOutButtonHeader: function (dispatch: Dispatch<any>, logoutAction: () => { type: auth; }) {
+        fire.auth().signOut()
+            .then(resp => {
+                dispatch(logoutAction());
+            })
+            .catch(error => console.log(error))
+    }
 };

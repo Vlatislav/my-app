@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react"
 import { firebaseService } from '../../../services/firebase'
 import Select, { ValueType } from 'react-select'
-import React from "react"
 import './choiceCompany.css'
 
 export default function ChoiceCompany(): JSX.Element {
@@ -12,29 +11,16 @@ export default function ChoiceCompany(): JSX.Element {
     const [companyName, PickCompanyName] = useState('')
 
     useEffect(() => {
-        firebaseService.fire.firestore().collection('User').doc(firebaseService.fire.auth().currentUser?.uid).get()
-            .then(doc => {
-                if (doc.exists) {
-                    setCompanyListID(doc.data()?.idCompany)
-                }
-            })
-            .catch(error => console.log(error))
+        firebaseService.companyListID(setCompanyListID)
     }, [])
 
     useEffect(() => {
-        companyListID.forEach((item: string, index: number) => {
-            firebaseService.fire.firestore().collection('Company').doc(item).get()
-                .then(doc => {
-                    setCompanysName(state => state.concat(doc.data()?.name))
-                })
-        })
+        firebaseService.setCompanysName(companyListID, setCompanysName)
     }, [companyListID])
 
     useEffect(() => {
-        if (companysName.length === companyListID.length)
-            for (const key in companysName)
-                setOptions(state => state.concat({ value: companysName[key], label: companysName[key] }))
-    }, [companyListID.length, companysName]);
+        firebaseService.setCompanyNamesInSelect(companysName, companyListID, setOptions)
+    }, [companyListID, companyListID.length, companysName]);
 
     const handlePickNameOfCompany = (value: ValueType<object, false>) => {
         PickCompanyName(String((Object.values(Object(value)))[1]))
