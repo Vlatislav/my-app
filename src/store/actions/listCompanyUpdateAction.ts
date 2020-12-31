@@ -1,7 +1,7 @@
-export enum list {
-    LIST_COMPANY = 'LIST_COMPANY',
-    LIST_COMPANY_SUCCESS = 'LIST_COMPANY_SUCCESS',
-    LIST_COMPANY_ERROR = 'LIST_COMPANY_ERROR',
+export enum update {
+    LIST_COMPANY_UPDATE = 'LIST_COMPANY_UPDATE',
+    LIST_COMPANY_UPDATE_SUCCESS = 'LIST_COMPANY_UPDATE_SUCCESS',
+    LIST_COMPANY_UPDATE_ERROR = 'LIST_COMPANY_UPDATE_ERROR',
 }
 
 export interface IListCompanyInfo {
@@ -12,20 +12,20 @@ export interface IListCompanyInfo {
 
 export const listCompanyAction = () => {
     return {
-        type: list.LIST_COMPANY,
+        type: update.LIST_COMPANY_UPDATE,
     }
 }
 
 export const listCompanySuccessAction = (listCompanyInfo: IListCompanyInfo) => {
     return {
-        type: list.LIST_COMPANY_SUCCESS,
+        type: update.LIST_COMPANY_UPDATE_SUCCESS,
         payload: listCompanyInfo
     }
 }
 
 export const listCompanyErrorAction = (errorMessage: string) => {
     return {
-        type: list.LIST_COMPANY_ERROR,
+        type: update.LIST_COMPANY_UPDATE_ERROR,
         payload: errorMessage
     }
 }
