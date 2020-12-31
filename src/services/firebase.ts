@@ -20,7 +20,7 @@ export const firebaseService = {
     auth: fire.auth,
     firestore: fire.firestore,
     userID: fire.auth().currentUser?.uid,
-    addNewCompany: async function (nameOfCompany: string | undefined) {
+    addNewCompany: async function (nameOfCompany: string | undefined, IDCompany: never[]) {
         if (fire.auth().currentUser?.uid === undefined)
             return alert('Error.You need to register')
         if (!nameOfCompany)
@@ -31,39 +31,40 @@ export const firebaseService = {
             console.log('_-_-', nameOfCompany, fire.auth().currentUser?.uid)
             const findCompanyForName = await fire.firestore().collection('Company').where('name', '==', nameOfCompany).get();
 
-            fire.firestore().collection('User').doc(fire.auth().currentUser?.uid).get()
-                .then(doc => {
-                    if (doc.exists) {
-                        let listCompany = doc.data()?.idCompany
-                        if (findCompanyForName.empty) {
-                            const newCompany = fire.firestore().collection('Company').doc()
-                            const newCompanyID = newCompany.id;
+            //fire.firestore().collection('User').doc(fire.auth().currentUser?.uid).get()
+            //    .then(doc => {
+            //        if (doc.exists) {
+            //            let listCompany = doc.data()?.idCompany
 
-                            fire.firestore().collection('User').doc(fire.auth().currentUser?.uid).update({
-                                idCompany: [...listCompany, newCompanyID]
-                            })
-                                .then(resp => console.log('it\'s okay', resp))
-                                .catch(error => console.log(new Error(error)))
+            if (findCompanyForName.empty) {
+                const newCompany = fire.firestore().collection('Company').doc()
+                const newCompanyID = newCompany.id;
 
-                            newCompany.set({
-                                name: nameOfCompany,
-                                risks: {},
-                            })
-                                .then(resp => console.log('it\'s okay', resp))
-                                .catch(error => console.log(new Error(error)))
-
-
-                            alert("You added yourself a company")
-                        }
-                        else {
-                            alert("This company already exists")
-                        }
-                    }
-                    else {
-                        alert('Error. Doc not exists.')
-                    }
+                fire.firestore().collection('User').doc(fire.auth().currentUser?.uid).update({
+                    idCompany: [...IDCompany, newCompanyID]
                 })
+                    .then(resp => console.log('it\'s okay', resp))
+                    .catch(error => console.log(new Error(error)))
+
+                newCompany.set({
+                    name: nameOfCompany,
+                    risks: {},
+                })
+                    .then(resp => console.log('it\'s okay', resp))
+                    .catch(error => console.log(new Error(error)))
+
+
+                alert("You added yourself a company")
+            }
+            else {
+                alert("This company already exists")
+            }
         }
+        //    else {
+        //        alert('Error. Doc not exists.')
+        //    }
+        //})
+        //}
     },
     addNewRisk: async function (nameOfCompanyForAddRisk: string | undefined, nameOfRisk: string | undefined, valueOfRisk: string | undefined) {
         if (fire.auth().currentUser?.uid === undefined)
@@ -157,9 +158,8 @@ export const firebaseService = {
     companyListID: function (setCompanyListID: React.Dispatch<React.SetStateAction<never[]>>) {
         fire.firestore().collection('User').doc(this.fire.auth().currentUser?.uid).get()
             .then(doc => {
-                if (doc.exists) {
+                if (doc.exists)
                     setCompanyListID(doc.data()?.idCompany)
-                }
             })
             .catch(error => console.log('error', error))
     },
@@ -169,12 +169,16 @@ export const firebaseService = {
                 .then(doc => {
                     setCompanysName(state => state.concat(doc.data()?.name))
                 })
+                .catch(error => console.log('error setCompanysName', error))
         })
     },
     setCompanyNamesInSelect: function (companysName: string[], companyListID: never[], setOptions: React.Dispatch<React.SetStateAction<object[]>>) {
-        if (companysName.length === companyListID.length)
-            for (const key in companysName)
+        if (companysName.length === companyListID.length) {
+            for (const key in companysName) {
                 setOptions(state => state.concat({ value: companysName[key], label: companysName[key] }))
+            }
+            //return companysName
+        }
     },
     logOutButtonHeader: function (dispatch: Dispatch<any>, logoutAction: () => { type: auth; }) {
         fire.auth().signOut()
@@ -182,5 +186,26 @@ export const firebaseService = {
                 dispatch(logoutAction());
             })
             .catch(error => console.log(error))
+    },
+
+
+    getListCompany: function (setListNamesCompany: React.Dispatch<React.SetStateAction<never[]>>) {
+        //let listCompanysName: Array<string> = [];
+        //let listID: Array<string> = [];
+        //let once: boolean = true;
+        //find 
+        //while (once) {
+        fire.firestore().collection('User').doc(fire.auth().currentUser?.uid).get()
+            // eslint-disable-next-line no-loop-func
+            .then(doc => {
+                if (doc.exists) {
+                    console.log('doc.data()?.idCompany', doc.data()?.idCompany)
+                    setListNamesCompany(doc.data()?.idCompany)
+                }
+            })
+            .catch(error => console.log('error', error))
+        //}
     }
+
+
 };

@@ -1,10 +1,14 @@
 import { useState } from "react"
+import { useSelector } from "react-redux"
 //import { firestore, auth } from "../../../index";
 import { firebaseService } from '../../../services/firebase'
+import { RootState } from "../../../store/reducers/rootReducer"
 
 
 export default function CreateCompany(): JSX.Element {
     const [nameOfCompany, setNameOfCompany] = useState('')
+
+    const IDCompany: never[] = useSelector((state: RootState) => state.listCompany.listCompanyInfo.listCompany)
 
     const handleChangeNameOfCompany = (event: React.FormEvent<HTMLInputElement>) => {
         setNameOfCompany(event.currentTarget.value);
@@ -13,7 +17,7 @@ export default function CreateCompany(): JSX.Element {
 
     const addNewCompany = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         event.preventDefault();
-        firebaseService.addNewCompany(nameOfCompany)
+        firebaseService.addNewCompany(nameOfCompany, IDCompany)
     }
 
     return (

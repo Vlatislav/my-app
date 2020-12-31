@@ -33,7 +33,10 @@ export default function Registration(): JSX.Element {
         setTimeout(async () => {
           const emailFromBackend = await firebaseService.logIn(email, pass)
           if (emailFromBackend !== 'error') {
-            dispatch(loginSuccessAction({ email: emailFromBackend }))
+            dispatch(loginSuccessAction({ email: emailFromBackend }));
+            //const listFromBackend = firebaseService.getListCompany()
+            //console.log(22222222, listFromBackend)
+
             history.push("/company")
           }
           else dispatch(loginErrorAction(emailFromBackend))

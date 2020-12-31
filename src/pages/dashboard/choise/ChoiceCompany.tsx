@@ -16,11 +16,12 @@ export default function ChoiceCompany(): JSX.Element {
 
     useEffect(() => {
         firebaseService.setCompanysName(companyListID, setCompanysName)
-    }, [companyListID])
+        //console.log('companysName', companysName)
+    }, [companyListID, companysName])
 
     useEffect(() => {
         firebaseService.setCompanyNamesInSelect(companysName, companyListID, setOptions)
-    }, [companyListID, companyListID.length, companysName]);
+    }, [companyListID, companysName]);
 
     const handlePickNameOfCompany = (value: ValueType<object, false>) => {
         PickCompanyName(String((Object.values(Object(value)))[1]))

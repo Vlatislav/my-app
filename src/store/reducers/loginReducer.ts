@@ -20,10 +20,10 @@ export const loginReducer = (state = initialState, action: AnyAction) => {
             return { ...state, isLoading: false, userInfo: action.payload, isLogged: true, errorMessage: '' }
         }
         case auth.LOGIN_ERROR: {
-            return { ...state, isLoading: false, userInfo: { email: 'login_error' }, isLogged: false, errorMessage: action.payload }
+            return { ...state, isLoading: false, userInfo: { email: action.payload }, isLogged: false, errorMessage: action.payload }
         }
         case auth.LOGOUT: {
-            return { ...state, isLoading: false, userInfo: { email: 'logout' }, isLogged: false, errorMessage: '' }
+            return { ...state, isLoading: false, userInfo: { email: action.payload }, isLogged: false, errorMessage: '' }
         }
         default: return { ...state }
     }

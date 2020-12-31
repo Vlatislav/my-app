@@ -22,7 +22,7 @@ export default function Header(props: any): JSX.Element {
     return (
         <div className="header">
             <div id='header__block'>
-                <h2>You sign in with: {email}</h2>
+                <h2>You sign in with: {!email ? 'none' : email}</h2>
                 <ChoiceCompany />
                 <button id='button' onClick={logOut}>Log out</button>
             </div>
