@@ -20,6 +20,8 @@ import clsx from 'clsx';
 import Divider from '@material-ui/core/Divider';
 import Dashboard from './pages/dashboard/dashboard/Dashboard';
 import Company from './pages/company/Company';
+import { RootState } from './store/reducers/rootReducer';
+import { useSelector } from 'react-redux';
 
 const drawerWidth: number = 240;
 
@@ -104,62 +106,115 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function App(): JSX.Element {
+
+  const isLoading = useSelector((state: RootState) => state.login.isLogged)
+  //const isExit = useSelector((state: RootState) => state.logOut.isExit)
+
   const classes = useStyles();
   const [open, /*setOpen*/] = React.useState(true);
-  return (
-    <Router>
-      <div className={classes.root}>
-        <nav>
-          <Drawer
-            variant="permanent"
-            classes={{
-              paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose),
-            }}
-            open={open}
-          >
-            <List className={classes.content}>
-              <ListItem button>
-                <ListItemIcon>
-                  <DashboardIcon />
-                </ListItemIcon>
-                <ListItemText primary="Dashboard" />
-                <Link className="link" to="/dashboard"></Link>
-              </ListItem>
 
-              <ListItem button>
-                <ListItemIcon>
-                  <BusinessIcon />
-                </ListItemIcon>
-                <ListItemText primary="Company" />
-                <Link className="link" to="/company"></Link>
-              </ListItem>
+  if (isLoading) {
+    return (
+      <Router>
+        <div className={classes.root}>
+          <nav>
+            <Drawer
+              variant="permanent"
+              classes={{
+                paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose),
+              }}
+              open={open}
+            >
+              <List className={classes.content}>
 
-              <ListItem button>
-                <ListItemIcon>
-                  <HomeIcon />
-                </ListItemIcon>
-                <ListItemText primary="Home/Log out"></ListItemText>
-                <Link className="link" to="/"></Link>
-              </ListItem>
-            </List>
-            <Divider />
-          </Drawer>
+                <ListItem button>
+                  <ListItemIcon>
+                    <DashboardIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Dashboard" />
+                  <Link className="link" to="/dashboard"></Link>
+                </ListItem>
 
-        </nav>
+                <ListItem button>
+                  <ListItemIcon>
+                    <BusinessIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Company" />
+                  <Link className="link" to="/company"></Link>
+                </ListItem>
 
-        <Switch>
-          <Route path="/dashboard">
-            < Dashboard />
-          </Route>
-          <Route path="/company">
-            <Company />
-          </Route>
-          <Route path="/">
-            <Registration />
-          </Route>
-        </Switch>
-      </div>
+                <ListItem button>
+                  <ListItemIcon>
+                    <HomeIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Home/Log out"></ListItemText>
+                  <Link className="link" to="/"></Link>
+                </ListItem>
+              </List>
+              <Divider />
+            </Drawer>
 
-    </Router>
-  );
+          </nav>
+
+          <Switch>
+            <Route path="/dashboard">
+              < Dashboard />
+            </Route>
+            <Route path="/company">
+              <Company />
+            </Route>
+            <Route path="/">
+              <Registration />
+            </Route>
+          </Switch>
+        </div>
+
+      </Router>
+    )
+  }
+  else
+
+    return (
+      <Router>
+        <div className={classes.root}>
+          <nav>
+            <Drawer
+              variant="permanent"
+              classes={{
+                paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose),
+              }}
+              open={open}
+            >
+              <List className={classes.content}>
+
+
+
+                <ListItem button>
+                  <ListItemIcon>
+                    <HomeIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Home/Log out"></ListItemText>
+                  <Link className="link" to="/"></Link>
+                </ListItem>
+              </List>
+              <Divider />
+            </Drawer>
+
+          </nav>
+
+          <Switch>
+            <Route path="/dashboard">
+              < Dashboard />
+            </Route>
+            <Route path="/company">
+              <Company />
+            </Route>
+            <Route path="/">
+              <Registration />
+            </Route>
+          </Switch>
+        </div>
+
+      </Router>
+    );
 }

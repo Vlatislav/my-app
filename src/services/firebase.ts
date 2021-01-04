@@ -1,7 +1,5 @@
 import 'firebase/firestore';
 import firebase from 'firebase';
-import { Dispatch } from 'redux';
-import { auth } from '../store/actions/loginAction';
 
 const firebaseConfig = {
     apiKey: "AIzaSyBjVe9zaDd0HFY0W9cFmLveiiNUgBMSAeg",
@@ -202,12 +200,12 @@ export const firebaseService = {
             //return companysName
         }
     },
-    logOutButtonHeader: function (dispatch: Dispatch<any>, logoutAction: () => { type: auth; }) {
+    logOutButtonHeader: function () {
         fire.auth().signOut()
-            .then(resp => {
-                dispatch(logoutAction());
+            .catch(error => {
+                console.log(error.message)
+                throw new Error(error.message)
             })
-            .catch(error => console.log(error))
     },
     getListCompany: function (setListNamesCompany: React.Dispatch<React.SetStateAction<never[]>>) {
         //let listCompanysName: Array<string> = [];

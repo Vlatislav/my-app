@@ -2,7 +2,6 @@ export enum auth {
     LOGIN = 'LOGIN',
     LOGIN_SUCCESS = 'LOGIN_SUCCESS',
     LOGIN_ERROR = 'LOGIN_ERROR',
-    LOGOUT = '/LOGOUT'
 }
 
 export interface IUserInfo {
@@ -27,11 +26,5 @@ export const loginErrorAction = (errorMessage: string) => {
     return {
         type: auth.LOGIN_ERROR,
         payload: errorMessage
-    }
-}
-
-export const logoutAction = () => {
-    return {
-        type: auth.LOGOUT,
     }
 }

@@ -4,6 +4,7 @@ import { firebaseService } from '../../services/firebase'
 import { auth } from '../actions/loginAction'
 import { reg } from '../actions/registrationAction'
 import { update_risk } from '../actions/listRiskUpdateAction'
+import { log_out } from '../actions/logOutAction'
 
 function* login(action: any) {
     try {
@@ -12,6 +13,16 @@ function* login(action: any) {
         yield put({ type: auth.LOGIN_SUCCESS, payload: email });
     } catch (e) {
         yield put({ type: auth.LOGIN_ERROR, errorMessage: e.message });
+    }
+}
+
+function* logOut(action: any) {
+    try {
+        console.log(action, 'LOGOUT SAGA')
+        yield call(firebaseService.logOutButtonHeader);
+        yield put({ type: log_out.LOG_OUT_SUCCESS, payload: true });
+    } catch (e) {
+        yield put({ type: log_out.LOG_OUT_ERROR, errorMessage: e.message });
     }
 }
 
@@ -49,6 +60,7 @@ function* registration(action: any) {
 
 function* sagas() {
     yield takeEvery(auth.LOGIN, login);
+    yield takeEvery(log_out.LOG_OUT, logOut);
     yield takeEvery(reg.REGISTRATION, registration);
     yield takeEvery(update.LIST_COMPANY_UPDATE, updateCompany);
     yield takeEvery(update_risk.LIST_RISK_UPDATE, updateRisk)

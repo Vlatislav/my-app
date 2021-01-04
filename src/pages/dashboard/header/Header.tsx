@@ -1,10 +1,9 @@
-import { firebaseService } from '../../../services/firebase'
 import ChoiceCompany from '../choise/ChoiceCompany'
 import './header.css'
 import { useDispatch, useSelector } from 'react-redux'
-import { logoutAction } from '../../../store/actions/loginAction'
 import { RootState } from '../../../store/reducers/rootReducer'
 import { useHistory } from 'react-router-dom'
+import { logOutAction } from '../../../store/actions/logOutAction'
 
 export default function Header(props: any): JSX.Element {
 
@@ -15,7 +14,7 @@ export default function Header(props: any): JSX.Element {
     const dispatch = useDispatch();
 
     const logOut = () => {
-        firebaseService.logOutButtonHeader(dispatch, logoutAction)
+        dispatch(logOutAction())
         history.push('/')
     }
 

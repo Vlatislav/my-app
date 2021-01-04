@@ -9,6 +9,8 @@ import { registrationReducer } from './registrationReducer'
 import { IListRiskUpdateModel } from '../../pages/models/listRiskUpdateModel'
 import { IRegistrationModel } from '../../pages/models/registrationModel'
 import { IListCompanyUpdateModel } from '../../pages/models/listCompanyUpdateModel'
+import { ILogOutModel } from '../../pages/models/logOutModel'
+import { logOutReducer } from './logOutReducer'
 
 
 export interface RootState {
@@ -16,8 +18,8 @@ export interface RootState {
     listCompany: IListCompanyModel,
     listRiskUpdate: IListRiskUpdateModel,
     registry: IRegistrationModel,
-    listCompanyUpdate: IListCompanyUpdateModel
-
+    listCompanyUpdate: IListCompanyUpdateModel,
+    logOut: ILogOutModel
 }
 
 export const rootReducer = combineReducers({
@@ -25,5 +27,6 @@ export const rootReducer = combineReducers({
     listCompany: listCompanyReducer,
     listRiskUpdate: listRiskUpdateReducer,
     registry: registrationReducer,
-    listCompanyUpdate: listCompanyUpdateReducer
+    listCompanyUpdate: listCompanyUpdateReducer,
+    logOut: logOutReducer
 })
