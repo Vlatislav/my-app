@@ -10,20 +10,21 @@ export interface IListCompanyInfo {
 
 
 
-export const listCompanyAction = () => {
+export const listCompanyUpdateAction = (company: any) => {
     return {
         type: update.LIST_COMPANY_UPDATE,
+        payload: company
     }
 }
 
-export const listCompanySuccessAction = (listCompanyInfo: IListCompanyInfo) => {
+export const listCompanyUpdateSuccessAction = (listCompanyInfo: IListCompanyInfo) => {
     return {
         type: update.LIST_COMPANY_UPDATE_SUCCESS,
         payload: listCompanyInfo
     }
 }
 
-export const listCompanyErrorAction = (errorMessage: string) => {
+export const listCompanyUpdateErrorAction = (errorMessage: string) => {
     return {
         type: update.LIST_COMPANY_UPDATE_ERROR,
         payload: errorMessage

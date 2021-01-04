@@ -7,11 +7,17 @@ import { rootReducer } from './store/reducers/rootReducer';
 import createSagaMiddleware from 'redux-saga'
 import { Provider } from 'react-redux'
 import { composeWithDevTools } from 'redux-devtools-extension';
+import sagas from './store/sagas/updateCompany';
+
+// then run the saga
 
 const sagaMiddleware = createSagaMiddleware()
 
+
+
 const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(sagaMiddleware)))
 
+sagaMiddleware.run(sagas)
 
 render(
   <Provider store={store}>
