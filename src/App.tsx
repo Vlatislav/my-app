@@ -107,13 +107,12 @@ const useStyles = makeStyles((theme) => ({
 
 export default function App(): JSX.Element {
 
-  const isLoading = useSelector((state: RootState) => state.login.isLogged)
-  //const isExit = useSelector((state: RootState) => state.logOut.isExit)
+  const isLogged = useSelector((state: RootState) => state.login.isLogged)
 
   const classes = useStyles();
   const [open, /*setOpen*/] = React.useState(true);
 
-  if (isLoading) {
+  if (isLogged) {
     return (
       <Router>
         <div className={classes.root}>

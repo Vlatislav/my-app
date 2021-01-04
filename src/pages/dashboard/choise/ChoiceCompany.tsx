@@ -2,6 +2,9 @@ import { useState, useEffect } from "react"
 import { firebaseService } from '../../../services/firebase'
 import Select, { ValueType } from 'react-select'
 import './choiceCompany.css'
+import { useDispatch } from "react-redux"
+import { listCompanyAction } from "../../../store/actions/listCompanyAction"
+
 
 export default function ChoiceCompany(): JSX.Element {
 
@@ -10,9 +13,12 @@ export default function ChoiceCompany(): JSX.Element {
     const [options, setOptions] = useState<object[]>([])
     const [companyName, PickCompanyName] = useState('')
 
+    const dispatch = useDispatch()
+
     useEffect(() => {
+        dispatch(listCompanyAction())
         firebaseService.companyListID(setCompanyListID)
-    }, [])
+    }, [dispatch])
 
     useEffect(() => {
         firebaseService.setCompanysName(companyListID, setCompanysName)
@@ -31,9 +37,11 @@ export default function ChoiceCompany(): JSX.Element {
     return (
         <div id="selectCompany">
             <Select
+                defaultValue={options[0]}
                 pickcompanyname={companyName}
                 onChange={handlePickNameOfCompany}
                 options={options}
+
             />
         </div>
     )

@@ -2,10 +2,12 @@ import { AnyAction } from 'redux'
 import { IListCompanyUpdateModel } from '../../pages/models/listCompanyUpdateModel'
 import { update } from '../actions/listCompanyUpdateAction'
 
+
 const initialState: IListCompanyUpdateModel = {
     isUpdate: false,
     errorMessage: ''
 }
+
 
 export const listCompanyUpdateReducer = (state = initialState, action: AnyAction) => {
     switch (action.type) {

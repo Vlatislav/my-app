@@ -9,7 +9,7 @@ export default function Header(props: any): JSX.Element {
 
     const history = useHistory();
 
-    const email = useSelector((state: RootState) => state.login.userInfo)
+    const email = useSelector((state: RootState) => state.login.userInfo.email)
     //console.log('email', email)
     const dispatch = useDispatch();
 

@@ -1,6 +1,6 @@
 import { AnyAction } from 'redux'
 import { IListCompanyModel } from '../../pages/models/listCompanyModel'
-import { list } from '../actions/listCompanyAction'
+import { list_company } from '../actions/listCompanyAction'
 
 
 const initialState: IListCompanyModel = {
@@ -12,13 +12,13 @@ const initialState: IListCompanyModel = {
 
 export const listCompanyReducer = (state = initialState, action: AnyAction) => {
     switch (action.type) {
-        case list.LIST_COMPANY: {
+        case list_company.LIST_COMPANY: {
             return { ...state, isUpdate: true }
         }
-        case list.LIST_COMPANY_SUCCESS: {
-            return { ...state, listCompanyInfo: { listCompany: [action.payload] }, isUpdate: true, errorMessage: '' }
+        case list_company.LIST_COMPANY_SUCCESS: {
+            return { ...state, listCompanyInfo: { listCompany: action.payload }, isUpdate: true, errorMessage: '' }
         }
-        case list.LIST_COMPANY_ERROR: {
+        case list_company.LIST_COMPANY_ERROR: {
             return { ...state, listCompanyInfo: { listCompany: [] }, isUpdate: false, errorMessage: action.payload }
         }
         default: return { ...state }

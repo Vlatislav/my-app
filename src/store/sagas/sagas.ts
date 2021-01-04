@@ -5,6 +5,9 @@ import { auth } from '../actions/loginAction'
 import { reg } from '../actions/registrationAction'
 import { update_risk } from '../actions/listRiskUpdateAction'
 import { log_out } from '../actions/logOutAction'
+import { list_company } from '../actions/listCompanyAction'
+
+
 
 function* login(action: any) {
     try {
@@ -25,6 +28,18 @@ function* logOut(action: any) {
         yield put({ type: log_out.LOG_OUT_ERROR, errorMessage: e.message });
     }
 }
+
+function* listCompany(action: any) {
+    try {
+        console.log(action, 'LIST COMPANY SAGA')
+        const listCompany: Array<string> = yield call(firebaseService.getcompanyListID);
+        console.log('SAGA COMPANY LIST', listCompany)
+        yield put({ type: list_company.LIST_COMPANY_SUCCESS, payload: listCompany });
+    } catch (e) {
+        yield put({ type: list_company.LIST_COMPANY_ERROR, errorMessage: e.message });
+    }
+}
+
 
 function* updateCompany(action: any) {
     try {
@@ -59,6 +74,7 @@ function* registration(action: any) {
 }
 
 function* sagas() {
+    yield takeEvery(list_company.LIST_COMPANY, listCompany)
     yield takeEvery(auth.LOGIN, login);
     yield takeEvery(log_out.LOG_OUT, logOut);
     yield takeEvery(reg.REGISTRATION, registration);
