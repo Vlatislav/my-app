@@ -27,7 +27,7 @@ export default function ChoiceCompany(): JSX.Element {
         PickCompanyName(String((Object.values(Object(value)))[1]))
     }
 
-    console.log(companyName)
+    //console.log(companyName)
     return (
         <div id="selectCompany">
             <Select

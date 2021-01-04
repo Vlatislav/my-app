@@ -1,11 +1,13 @@
 import { useState } from "react"
+import { useDispatch } from "react-redux"
 import { firebaseService } from '../../../services/firebase'
+import { listRiskUpdateAction } from "../../../store/actions/listRiskUpdateAction"
 
 export default function CreateRisk(): JSX.Element {
     const [nameOfRisk, setNameOfRisk] = useState('')
     const [valueOfRisk, setValueOfRisk] = useState('Minimum')
     const [nameOfCompanyForAddRisk, setNameOfCompanyForAddRisk] = useState('')
-
+    const dispatch = useDispatch();
     const handleChangeNameOfRisk = (event: React.FormEvent<HTMLInputElement>): void => setNameOfRisk(event.currentTarget.value)
 
     const handleChangeValueOfRisk = (event: React.ChangeEvent<HTMLSelectElement>) => setValueOfRisk(event.currentTarget.value)
@@ -14,7 +16,10 @@ export default function CreateRisk(): JSX.Element {
 
     const createNewRisk = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         event.preventDefault();
-        firebaseService.addNewRisk(nameOfCompanyForAddRisk, nameOfRisk, valueOfRisk)
+
+        dispatch(listRiskUpdateAction({ nameOfCompanyForAddRisk, nameOfRisk, valueOfRisk }))
+
+        //firebaseService.addNewRisk(nameOfCompanyForAddRisk, nameOfRisk, valueOfRisk)
     }
 
     return (

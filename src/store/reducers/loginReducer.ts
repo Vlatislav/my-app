@@ -17,7 +17,7 @@ export const loginReducer = (state = initialState, action: AnyAction) => {
             return { ...state, isLoading: true }
         }
         case auth.LOGIN_SUCCESS: {
-            return { ...state, isLoading: false, userInfo: action.payload, isLogged: true, errorMessage: '' }
+            return { ...state, isLoading: false, userInfo: action.payload, isLogged: false, errorMessage: 'success' }
         }
         case auth.LOGIN_ERROR: {
             return { ...state, isLoading: false, userInfo: { email: action.payload }, isLogged: false, errorMessage: action.payload }

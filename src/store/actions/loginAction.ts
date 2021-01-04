@@ -9,9 +9,10 @@ export interface IUserInfo {
     email: string
 }
 
-export const loginAction = () => {
+export const loginAction = (loga: any) => {
     return {
         type: auth.LOGIN,
+        payload: loga
     }
 }
 
