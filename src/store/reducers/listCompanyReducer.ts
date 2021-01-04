@@ -16,7 +16,7 @@ export const listCompanyReducer = (state = initialState, action: AnyAction) => {
             return { ...state, isUpdate: true }
         }
         case list.LIST_COMPANY_SUCCESS: {
-            return { ...state, listCompanyInfo: action.payload, isUpdate: true, errorMessage: '' }
+            return { ...state, listCompanyInfo: { listCompany: [action.payload] }, isUpdate: true, errorMessage: '' }
         }
         case list.LIST_COMPANY_ERROR: {
             return { ...state, listCompanyInfo: { listCompany: [] }, isUpdate: false, errorMessage: action.payload }

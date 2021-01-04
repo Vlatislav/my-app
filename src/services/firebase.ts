@@ -2,7 +2,6 @@ import 'firebase/firestore';
 import firebase from 'firebase';
 import { Dispatch } from 'redux';
 import { auth } from '../store/actions/loginAction';
-import { useHistory } from 'react-router-dom';
 
 const firebaseConfig = {
     apiKey: "AIzaSyBjVe9zaDd0HFY0W9cFmLveiiNUgBMSAeg",
@@ -21,13 +20,22 @@ export const firebaseService = {
     auth: fire.auth,
     firestore: fire.firestore,
     userID: fire.auth().currentUser?.uid,
-    addNewCompany: async function (nameOfCompany: string | undefined, IDCompany: never[]) {
-        if (fire.auth().currentUser?.uid === undefined)
-            return alert('Error.You need to register')
-        if (!nameOfCompany)
+    addNewCompany: async function (nameOfCompany: string | undefined) {
+        if (fire.auth().currentUser?.uid === undefined) {
+            alert('Error.You need to register')
+            throw new Error('Error.You need to register')
+        }
+
+        if (!nameOfCompany) {
             alert('Сompany name cannot be an empty string!!!')
-        else if (!isNaN(+nameOfCompany))
+            throw new Error('Сompany name cannot be an empty string!!!')
+        }
+
+        else if (!isNaN(+nameOfCompany)) {
             alert('Сompany name cannot be an number\'s string!!!')
+            throw new Error('Сompany name cannot be an number\'s string!!!')
+        }
+
         else if (true) {
             console.log('_-_-', nameOfCompany, fire.auth().currentUser?.uid)
             const findCompanyForName = await fire.firestore().collection('Company').where('name', '==', nameOfCompany).get();
@@ -36,8 +44,16 @@ export const firebaseService = {
                 const newCompany = fire.firestore().collection('Company').doc()
                 const newCompanyID = newCompany.id;
 
+                const IDOfCompanys: Array<string> = await fire.firestore().collection('User').doc(fire.auth().currentUser?.uid).get()
+                    .then(doc => {
+                        if (doc.exists) {
+                            console.log('firebase ID', doc.data()?.idCompany)
+                            return doc.data()?.idCompany
+                        }
+                    })
+
                 fire.firestore().collection('User').doc(fire.auth().currentUser?.uid).update({
-                    idCompany: [...IDCompany, newCompanyID]
+                    idCompany: [...IDOfCompanys, newCompanyID]
                 })
                     .then(resp => console.log('it\'s okay', resp))
                     .catch(error => console.log(new Error(error)))
@@ -51,9 +67,11 @@ export const firebaseService = {
 
 
                 alert("You added yourself a company")
+                return nameOfCompany
             }
             else {
                 alert("This company already exists")
+                throw new Error("This company already exists")
             }
         }
     },
@@ -89,7 +107,6 @@ export const firebaseService = {
                                     .then(doc => {
                                         if (doc.exists) {
                                             const arrayOfRisks = Object.keys(doc.data()?.risks)
-                                            //console.log(typeof arrayOfRisks, arrayOfRisks)
                                             if (arrayOfRisks.includes(nameOfRisk))
                                                 alert('This risk already exists')
                                             else {
@@ -98,7 +115,6 @@ export const firebaseService = {
                                                     .catch(error => console.log(new Error(error)))
                                                 alert(`You added a new risk ${nameOfRisk}`)
                                                 return nameOfRisk
-                                                console.log(risksObj);
                                             }
                                         }
                                     })
@@ -117,18 +133,17 @@ export const firebaseService = {
         }
     },
     logIn: async function (email: string, pass: string) {
-        console.log(email, pass)
+        //console.log(email, pass)
         try {
             const resp = await fire.auth().signInWithEmailAndPassword(email, pass);
-            console.log(resp.user?.uid);
+            //console.log(resp.user?.uid);
             if (resp.user?.email) {
                 return resp.user?.email;
             }
             throw new Error('error')
-            //else throw new Error('user not found')
         } catch (error) {
-            alert(error);
-            throw new Error('error')
+            alert(error.message);
+            throw new Error(error.message)
         }
     },
     register: function (email: string, pass: string) {
@@ -194,8 +209,6 @@ export const firebaseService = {
             })
             .catch(error => console.log(error))
     },
-
-
     getListCompany: function (setListNamesCompany: React.Dispatch<React.SetStateAction<never[]>>) {
         //let listCompanysName: Array<string> = [];
         //let listID: Array<string> = [];
@@ -213,6 +226,4 @@ export const firebaseService = {
             .catch(error => console.log('error', error))
         //}
     }
-
-
 };

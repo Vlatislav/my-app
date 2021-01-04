@@ -14,11 +14,13 @@ function* login(action: any) {
         yield put({ type: auth.LOGIN_ERROR, errorMessage: e.message });
     }
 }
+
 function* updateCompany(action: any) {
     try {
         console.log(action, 'TEST SAGA')
-        const company = yield call(firebaseService.addNewCompany, action.payload.nameOfCompany, action.payload.IDCompany);
-        yield put({ type: update.LIST_COMPANY_UPDATE_SUCCESS, payload: company });
+        const companyName = yield call(firebaseService.addNewCompany, action.payload.nameOfCompany);
+        console.log('SAGA COMPANY NAME NEW', companyName)
+        yield put({ type: update.LIST_COMPANY_UPDATE_SUCCESS, payload: companyName });
     } catch (e) {
         yield put({ type: update.LIST_COMPANY_UPDATE_ERROR, errorMessage: e.message });
     }

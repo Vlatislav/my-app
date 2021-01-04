@@ -10,7 +10,8 @@ export default function CreateCompany(): JSX.Element {
 
     const dispatch = useDispatch();
 
-    const IDCompany: never[] = useSelector((state: RootState) => state.listCompany.listCompanyInfo.listCompany)
+    const IDCompany: any = useSelector((state: RootState) => state.listCompany.listCompanyInfo.listCompany)
+    console.log('IDCompany', IDCompany)
 
     const handleChangeNameOfCompany = (event: React.FormEvent<HTMLInputElement>) => {
         setNameOfCompany(event.currentTarget.value);
@@ -19,9 +20,7 @@ export default function CreateCompany(): JSX.Element {
 
     const addNewCompany = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         event.preventDefault();
-        dispatch(listCompanyUpdateAction({
-            nameOfCompany, IDCompany
-        }))
+        dispatch(listCompanyUpdateAction({ nameOfCompany }))
     }
 
     return (

@@ -16,10 +16,7 @@ export default function CreateRisk(): JSX.Element {
 
     const createNewRisk = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         event.preventDefault();
-
         dispatch(listRiskUpdateAction({ nameOfCompanyForAddRisk, nameOfRisk, valueOfRisk }))
-
-        //firebaseService.addNewRisk(nameOfCompanyForAddRisk, nameOfRisk, valueOfRisk)
     }
 
     return (
