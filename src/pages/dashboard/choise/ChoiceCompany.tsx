@@ -1,47 +1,49 @@
 import { useState, useEffect } from "react"
-import { firebaseService } from '../../../services/firebase'
-import Select, { ValueType } from 'react-select'
+import Select from 'react-select'
 import './choiceCompany.css'
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { listCompanyAction } from "../../../store/actions/listCompanyAction"
+import { RootState } from "../../../store/reducers/rootReducer"
+import { pickCompanyAction } from "../../../store/actions/pickCompanyAction"
 
 
 export default function ChoiceCompany(): JSX.Element {
 
-    const [companyListID, setCompanyListID] = useState([])
-    const [companysName, setCompanysName] = useState<string[]>([])
     const [options, setOptions] = useState<object[]>([])
-    const [companyName, PickCompanyName] = useState('')
+    const companysNamesList = useSelector((state: RootState) => state.listCompany.listCompanysInfo.listCompany)
+    const [pickCompanyName, PickCompanyName] = useState(String(companysNamesList[0]))
 
+    const pickCompany = useSelector((state: RootState) => state.pickCompany.pickCompany)
     const dispatch = useDispatch()
 
     useEffect(() => {
         dispatch(listCompanyAction())
-        firebaseService.companyListID(setCompanyListID)
+        console.log(companysNamesList);
     }, [dispatch])
 
     useEffect(() => {
-        firebaseService.setCompanysName(companyListID, setCompanysName)
-        //console.log('companysName', companysName)
-    }, [companyListID, companysName])
+        const obj = companysNamesList.map((item, index) => {
+            console.log('---', item, index)
+            return { value: companysNamesList[index], label: companysNamesList[index] }
+        })
+        setOptions(obj)
+    }, [companysNamesList]);
 
-    useEffect(() => {
-        firebaseService.setCompanyNamesInSelect(companysName, companyListID, setOptions)
-    }, [companyListID, companysName]);
-
-    const handlePickNameOfCompany = (value: ValueType<object, false>) => {
-        PickCompanyName(String((Object.values(Object(value)))[1]))
+    const handlePickNameOfCompany = (value: any) => {
+        if (value.value !== pickCompanyName) {
+            PickCompanyName(String((Object.values(Object(value)))[1]))
+            dispatch(pickCompanyAction({ pickCompanyName }))
+        }
     }
 
-    //console.log(companyName)
+    console.log('===', pickCompany)
     return (
         <div id="selectCompany">
             <Select
-                defaultValue={options[0]}
-                pickcompanyname={companyName}
+                defaultValue={{ label: companysNamesList[0], value: companysNamesList }}
+                pickcompanyname={pickCompanyName}
                 onChange={handlePickNameOfCompany}
                 options={options}
-
             />
         </div>
     )

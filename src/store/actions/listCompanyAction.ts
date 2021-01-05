@@ -4,7 +4,7 @@ export enum list_company {
     LIST_COMPANY_ERROR = 'LIST_COMPANY_ERROR',
 }
 
-export interface IListCompanysIDInfo {
+export interface IListCompanysInfo {
     listCompany: any[],
 }
 
@@ -16,7 +16,7 @@ export const listCompanyAction = () => {
     }
 }
 
-export const listCompanySuccessAction = (listCompanyInfo: IListCompanysIDInfo) => {
+export const listCompanySuccessAction = (listCompanyInfo: IListCompanysInfo) => {
     return {
         type: list_company.LIST_COMPANY_SUCCESS,
         payload: listCompanyInfo

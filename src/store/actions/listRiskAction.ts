@@ -10,21 +10,21 @@ export interface IListRiskInfo {
 
 
 
-export const listRiskUpdateAction = (risks: any) => {
+export const listRiskAction = (risks: any) => {
     return {
         type: list_risk.LIST_RISK,
         payload: risks
     }
 }
 
-export const listRiskUpdateSuccessAction = (listCompanyInfo: IListRiskInfo) => {
+export const listRiskSuccessAction = (listCompanyInfo: IListRiskInfo) => {
     return {
         type: list_risk.LIST_RISK_SUCCESS,
         payload: listCompanyInfo
     }
 }
 
-export const listRiskUpdateErrorAction = (errorMessage: string) => {
+export const listRiskErrorAction = (errorMessage: string) => {
     return {
         type: list_risk.LIST_RISK_ERROR,
         payload: errorMessage

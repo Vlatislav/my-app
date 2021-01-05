@@ -6,6 +6,8 @@ import { reg } from '../actions/registrationAction'
 import { update_risk } from '../actions/listRiskUpdateAction'
 import { log_out } from '../actions/logOutAction'
 import { list_company } from '../actions/listCompanyAction'
+import { list_ID_company } from '../actions/listIDCompanyAction'
+import { pick } from '../actions/pickCompanyAction'
 
 
 
@@ -19,6 +21,16 @@ function* login(action: any) {
     }
 }
 
+function* pickCompany(action: any) {
+    try {
+        console.log(action, 'PICK COMPANY SAGA')
+        const pickCompany = yield call(firebaseService.pickCompany, action.payload.pickCompanyName);
+        yield put({ type: pick.PICK_SUCCESS, payload: pickCompany });
+    } catch (e) {
+        yield put({ type: pick.PICK_ERROR, errorMessage: e.message });
+    }
+}
+
 function* logOut(action: any) {
     try {
         console.log(action, 'LOGOUT SAGA')
@@ -29,10 +41,20 @@ function* logOut(action: any) {
     }
 }
 
+function* listIDCompany(action: any) {
+    try {
+        console.log(action, 'LIST COMPANY SAGA')
+        const listIDCompany: Array<string> = yield call(firebaseService.getcompanyIDList);
+        yield put({ type: list_ID_company.LIST_ID_COMPANY_SUCCESS, payload: { listIDCompany: [...listIDCompany] }, errorMessage: '' });
+    } catch (e) {
+        yield put({ type: list_ID_company.LIST_ID_COMPANY_ERROR, errorMessage: e.message });
+    }
+}
+
 function* listCompany(action: any) {
     try {
         console.log(action, 'LIST COMPANY SAGA')
-        const listCompany: Array<string> = yield call(firebaseService.getcompanyListID);
+        const listCompany: Array<string> = yield call(firebaseService.getcompanyList);
         yield put({ type: list_company.LIST_COMPANY_SUCCESS, payload: { listCompany: [...listCompany] }, errorMessage: '' });
     } catch (e) {
         yield put({ type: list_company.LIST_COMPANY_ERROR, errorMessage: e.message });
@@ -73,12 +95,14 @@ function* registration(action: any) {
 }
 
 function* sagas() {
-    yield takeEvery(list_company.LIST_COMPANY, listCompany)
+    yield takeEvery(pick.PICK, pickCompany)
+    yield takeEvery(list_ID_company.LIST_ID_COMPANY, listIDCompany);
+    yield takeEvery(list_company.LIST_COMPANY, listCompany);
     yield takeEvery(auth.LOGIN, login);
     yield takeEvery(log_out.LOG_OUT, logOut);
     yield takeEvery(reg.REGISTRATION, registration);
     yield takeEvery(update.LIST_COMPANY_UPDATE, updateCompany);
-    yield takeEvery(update_risk.LIST_RISK_UPDATE, updateRisk)
+    yield takeEvery(update_risk.LIST_RISK_UPDATE, updateRisk);
 }
 
 export default sagas;

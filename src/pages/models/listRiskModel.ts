@@ -1,4 +1,4 @@
 export interface IListRiskModel {
-    isUpdate: boolean,
+    listRisk: any,
     errorMessage: string
 }

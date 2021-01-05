@@ -1,5 +1,6 @@
 import 'firebase/firestore';
 import firebase from 'firebase';
+import { ValueType } from 'react-select';
 
 const firebaseConfig = {
     apiKey: "AIzaSyBjVe9zaDd0HFY0W9cFmLveiiNUgBMSAeg",
@@ -172,7 +173,49 @@ export const firebaseService = {
                 throw new Error(error.message)
             })
     },
-    getcompanyListID: async function () {
+    getcompanyList: async function () {
+        const IDOfCompanys: any = await fire.firestore().collection('User').doc(fire.auth().currentUser?.uid).get()
+            .then(doc => {
+                if (doc.exists) {
+                    return doc.data()?.idCompany
+                }
+            })
+            .catch(error => {
+                console.log('error', error.message)
+                throw new Error(error.message)
+            })
+
+        const newArray: any = [];
+
+
+        for await (let num of IDOfCompanys) {
+            await fire.firestore().collection('Company').doc(num).get()
+                .then(doc => {
+                    console.log(doc.data()?.name, 'sss')
+                    newArray.push(doc.data()?.name)
+                })
+                .catch(error => {
+                    console.log('error setCompanysName', error.message)
+                    throw new Error(error.message)
+                })
+        }
+
+        //nameCompanys = IDOfCompanys.map((item: string) => {
+        //    return fire.firestore().collection('Company').doc(item).get()
+        //        .then(doc => {
+        //            console.log(doc.data()?.name, 'sss')
+        //            return doc.data()?.name
+        //        })
+        //        .catch(error => {
+        //            console.log('error setCompanysName', error.message)
+        //            throw new Error(error.message)
+        //        })
+        //});
+        //
+        console.log('newArray', newArray)
+        return newArray
+    },
+    getcompanyIDList: async function () {
         const IDOfCompanys: any = await fire.firestore().collection('User').doc(fire.auth().currentUser?.uid).get()
             .then(doc => {
                 if (doc.exists) {
@@ -196,7 +239,13 @@ export const firebaseService = {
                 throw new Error(error.message)
             })
     },
-    setCompanysName: function (companyListID: never[], setCompanysName: React.Dispatch<React.SetStateAction<string[]>>) {
+
+    pickCompany: function (value: string) {
+        console.log('str', value)
+        return value
+    },
+
+    setCompanysName: function (companyListID: any[], setCompanysName: React.Dispatch<React.SetStateAction<string[]>>) {
         companyListID.forEach((item: string) => {
             fire.firestore().collection('Company').doc(item).get()
                 .then(doc => {
@@ -205,9 +254,10 @@ export const firebaseService = {
                 .catch(error => console.log('error setCompanysName', error))
         })
     },
-    setCompanyNamesInSelect: function (companysName: string[], companyListID: never[], setOptions: React.Dispatch<React.SetStateAction<object[]>>) {
+    setCompanyNamesInSelect: function (companysName: string[], companyListID: string[], setOptions: React.Dispatch<React.SetStateAction<object[]>>) {
         if (companysName.length === companyListID.length) {
             for (const key in companysName) {
+                console.log('key', key)
                 setOptions(state => state.concat({ value: companysName[key], label: companysName[key] }))
             }
             //return companysName

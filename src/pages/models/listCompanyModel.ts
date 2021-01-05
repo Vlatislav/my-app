@@ -1,6 +1,6 @@
-import { IListCompanysIDInfo } from "../../store/actions/listCompanyAction";
+import { IListCompanysInfo } from "../../store/actions/listCompanyAction";
 
 export interface IListCompanyModel {
-    listCompanysIDInfo: IListCompanysIDInfo,
+    listCompanysInfo: IListCompanysInfo,
     errorMessage: string
 }
