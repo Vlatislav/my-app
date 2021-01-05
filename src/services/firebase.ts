@@ -172,11 +172,10 @@ export const firebaseService = {
                 throw new Error(error.message)
             })
     },
-    getcompanyListID: function () {
-        fire.firestore().collection('User').doc(fire.auth().currentUser?.uid).get()
+    getcompanyListID: async function () {
+        const IDOfCompanys: any = await fire.firestore().collection('User').doc(fire.auth().currentUser?.uid).get()
             .then(doc => {
                 if (doc.exists) {
-                    console.log('LiSt', doc.data()?.idCompany, typeof (doc.data()?.idCompany))
                     return doc.data()?.idCompany
                 }
             })
@@ -184,6 +183,7 @@ export const firebaseService = {
                 console.log('error', error.message)
                 throw new Error(error.message)
             })
+        return IDOfCompanys
     },
     companyListID: function (setCompanyListID: React.Dispatch<React.SetStateAction<never[]>>) {
         fire.firestore().collection('User').doc(this.fire.auth().currentUser?.uid).get()

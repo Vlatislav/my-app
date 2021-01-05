@@ -33,8 +33,7 @@ function* listCompany(action: any) {
     try {
         console.log(action, 'LIST COMPANY SAGA')
         const listCompany: Array<string> = yield call(firebaseService.getcompanyListID);
-        console.log('SAGA COMPANY LIST', listCompany)
-        yield put({ type: list_company.LIST_COMPANY_SUCCESS, payload: listCompany });
+        yield put({ type: list_company.LIST_COMPANY_SUCCESS, payload: { listCompany: [...listCompany] }, errorMessage: '' });
     } catch (e) {
         yield put({ type: list_company.LIST_COMPANY_ERROR, errorMessage: e.message });
     }
@@ -43,8 +42,8 @@ function* listCompany(action: any) {
 
 function* updateCompany(action: any) {
     try {
-        console.log(action, 'TEST SAGA')
-        const companyName = yield call(firebaseService.addNewCompany, action.payload.nameOfCompany);
+        console.log(action, 'UPDATE COMPANY SAGA')
+        const companyName: any = yield call(firebaseService.addNewCompany, action.payload.nameOfCompany);
         console.log('SAGA COMPANY NAME NEW', companyName)
         yield put({ type: update.LIST_COMPANY_UPDATE_SUCCESS, payload: companyName });
     } catch (e) {
@@ -54,7 +53,7 @@ function* updateCompany(action: any) {
 
 function* updateRisk(action: any) {
     try {
-        console.log(action, 'RISK SAGA')
+        console.log(action, 'UPDATE RISK SAGA')
         const nameOfRisk = yield call(firebaseService.addNewRisk, action.payload.nameOfCompanyForAddRisk, action.payload.nameOfRisk, action.payload.valueOfRisk);
         yield put({ type: update_risk.LIST_RISK_UPDATE_SUCCESS, payload: nameOfRisk });
     } catch (e) {
@@ -64,7 +63,7 @@ function* updateRisk(action: any) {
 
 function* registration(action: any) {
     try {
-        console.log(action, 'REG SAGA')
+        console.log(action, 'REGISTRY SAGA')
         const email = yield call(firebaseService.register, action.payload.email, action.payload.pass);
         console.log('EMAIL', email, 'SAGA')
         yield put({ type: reg.REGISTRATION_SUCCESS, payload: email });

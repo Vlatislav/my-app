@@ -10,8 +10,8 @@ export default function CreateCompany(): JSX.Element {
 
     const dispatch = useDispatch();
 
-    const IDCompany: any = useSelector((state: RootState) => state.listCompany.listCompanyInfo.listCompany)
-    console.log('IDCompany', IDCompany)
+    //const IDCompany: any = useSelector((state: RootState) => state.listCompany.listCompanyInfo.listCompany)
+    //console.log('IDCompany', IDCompany)
 
     const handleChangeNameOfCompany = (event: React.FormEvent<HTMLInputElement>) => {
         setNameOfCompany(event.currentTarget.value);

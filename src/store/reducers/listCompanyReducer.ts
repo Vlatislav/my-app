@@ -4,8 +4,7 @@ import { list_company } from '../actions/listCompanyAction'
 
 
 const initialState: IListCompanyModel = {
-    listCompanyInfo: { listCompany: [] },
-    isUpdate: false,
+    listCompanysIDInfo: { listCompany: [] },
     errorMessage: ''
 }
 
@@ -13,13 +12,13 @@ const initialState: IListCompanyModel = {
 export const listCompanyReducer = (state = initialState, action: AnyAction) => {
     switch (action.type) {
         case list_company.LIST_COMPANY: {
-            return { ...state, isUpdate: true }
+            return { ...state, }
         }
         case list_company.LIST_COMPANY_SUCCESS: {
-            return { ...state, listCompanyInfo: { listCompany: action.payload }, isUpdate: true, errorMessage: '' }
+            return { ...state, listCompanysIDInfo: action.payload, errorMessage: '' }
         }
         case list_company.LIST_COMPANY_ERROR: {
-            return { ...state, listCompanyInfo: { listCompany: [] }, isUpdate: false, errorMessage: action.payload }
+            return { ...state, listCompanysIDInfo: { listCompany: [] }, errorMessage: action.payload }
         }
         default: return { ...state }
     }
